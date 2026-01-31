@@ -255,6 +255,24 @@ Defaults to false (use hardware acceleration where available).
 
 ---
 
+### credential.allowUnsafeRemotes
+
+Allow transmitting credentials to unsafe remote URLs such as unencrypted HTTP
+URLs. This setting is not recommended for general use and should only be used
+when necessary.
+
+Defaults false (disallow unsafe remote URLs).
+
+#### Example
+
+```shell
+git config --global credential.allowUnsafeRemotes true
+```
+
+**Also see: [GCM_ALLOW_UNSAFE_REMOTES][gcm-allow-unsafe-remotes]**
+
+---
+
 ### credential.autoDetectTimeout
 
 Set the maximum length of time, in milliseconds, that GCM should wait for a
@@ -567,6 +585,7 @@ _(unset)_|Windows: `wincredman`, macOS: `keychain`, Linux: _(none)_|-
 `gpg`|Use GPG to store encrypted files that are compatible with the [pass][pass] (requires GPG and `pass` to initialize the store).|macOS, Linux
 `cache`|Git's built-in [credential cache][credential-cache].|macOS, Linux
 `plaintext`|Store credentials in plaintext files (**UNSECURE**). Customize the plaintext store location with [`credential.plaintextStorePath`][credential-plaintextstorepath].|Windows, macOS, Linux
+`none`|Do not store credentials via GCM.|Windows, macOS, Linux
 
 #### Example
 
@@ -630,6 +649,24 @@ git config --global credential.dpapiStorePath D:\credentials
 ```
 
 **Also see: [GCM_DPAPI_STORE_PATH][gcm-dpapi-store-path]**
+
+---
+
+### credential.gpgPassStorePath
+
+Specify a custom directory to store GPG-encrypted [pass][pass]-compatible credential files
+in when [`credential.credentialStore`][credential-credentialstore] is set to `gpg`.
+
+Defaults to the value `~/.password-store` or `%USERPROFILE%\.password-store`.
+
+#### Example
+
+```shell
+git config --global credential.gpgPassStorePath /mnt/external-drive/.password-store
+```
+
+**Note:** Location of the password store used by [pass][pass] can be overridden by the
+`PASSWORD_STORE_DIR` environment variable, see the [man page][pass-man] for details.
 
 ---
 
@@ -1004,8 +1041,9 @@ Defaults to disabled.
 [devbox]: https://azure.microsoft.com/en-us/products/dev-box
 [enterprise-config]: enterprise-config.md
 [envars]: environment.md
-[freedesktop-ss]: https://specifications.freedesktop.org/secret-service/
+[freedesktop-ss]: https://specifications.freedesktop.org/secret-service-spec/
 [gcm-allow-windowsauth]: environment.md#GCM_ALLOW_WINDOWSAUTH
+[gcm-allow-unsafe-remotes]: environment.md#GCM_ALLOW_UNSAFE_REMOTES
 [gcm-authority]: environment.md#GCM_AUTHORITY-deprecated
 [gcm-autodetect-timeout]: environment.md#GCM_AUTODETECT_TIMEOUT
 [gcm-azrepos-credentialtype]: environment.md#GCM_AZREPOS_CREDENTIALTYPE
@@ -1042,6 +1080,7 @@ Defaults to disabled.
 [provider-migrate]: migration.md#gcm_authority
 [cache-options]: https://git-scm.com/docs/git-credential-cache#_options
 [pass]: https://www.passwordstore.org/
+[pass-man]: https://git.zx2c4.com/password-store/about/
 [trace2-normal-docs]: https://git-scm.com/docs/api-trace2#_the_normal_format_target
 [trace2-normal-env]: environment.md#GIT_TRACE2
 [trace2-event-docs]: https://git-scm.com/docs/api-trace2#_the_event_format_target

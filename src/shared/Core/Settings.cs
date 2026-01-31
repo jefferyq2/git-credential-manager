@@ -190,6 +190,11 @@ namespace GitCredentialManager
         bool UseSoftwareRendering { get; }
 
         /// <summary>
+        /// Permit the use of unsafe remotes URLs such as regular HTTP.
+        /// </summary>
+        bool AllowUnsafeRemotes { get; }
+
+        /// <summary>
         /// Get TRACE2 settings.
         /// </summary>
         /// <returns>TRACE2 settings object.</returns>
@@ -484,7 +489,7 @@ namespace GitCredentialManager
         /// <param name="property">Configuration property name.</param>
         /// <param name="value">Value of the configuration setting, or null.</param>
         /// <returns>True if a default setting has been set, false otherwise.</returns>
-        protected virtual bool TryGetExternalDefault(string section, string scope, string property, out string value)
+        protected internal virtual bool TryGetExternalDefault(string section, string scope, string property, out string value)
         {
             value = null;
             return false;
@@ -579,6 +584,12 @@ namespace GitCredentialManager
                     out string str) ? str.ToBooleanyOrDefault(defaultValue) : defaultValue;
             }
         }
+
+        public bool AllowUnsafeRemotes =>
+            TryGetSetting(KnownEnvars.GcmAllowUnsafeRemotes,
+                KnownGitCfg.Credential.SectionName,
+                KnownGitCfg.Credential.AllowUnsafeRemotes,
+                out string str) && str.ToBooleanyOrDefault(false);
 
         public Trace2Settings GetTrace2Settings()
         {
